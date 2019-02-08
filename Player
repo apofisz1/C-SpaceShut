@@ -1,0 +1,64 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Player : MonoBehaviour
+{
+
+    [SerializeField]
+    private float speed = 8.0f;
+
+   
+  private void Start()
+    {
+        transform.position = new Vector3(0, 0, 0); 
+    }
+
+   private void Update()
+    {
+        Movement();
+    }
+
+    private void Movement()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        transform.Translate(Vector3.right * Time.deltaTime * speed * horizontalInput);
+        transform.Translate(Vector3.up * Time.deltaTime * speed * verticalInput);
+
+        if (transform.position.y > 4.5f)
+        {
+            transform.position = new Vector3(transform.position.x, 4.5f, 0);
+        }
+
+        else if (transform.position.y < -4.5f)
+        {
+            transform.position = new Vector3(transform.position.x, -4.5f, 0);
+        }
+
+
+        if (transform.position.x > 8.5f)
+        {
+            transform.position = new Vector3(-8.5f, transform.position.y, 0);
+        }
+
+        else if (transform.position.x < -8.5f)
+        {
+            transform.position = new Vector3(8.5f, transform.position.y, 0);
+        }
+    }
+
+}
+
+fileFormatVersion: 2
+guid: 36b1d3f942eb7fd4fa5e042266d52f78
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
