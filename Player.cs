@@ -7,7 +7,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public GameObject LaserPrefab;
+    [SerializeField]
+    private GameObject LaserPrefab;
+    [SerializeField]
+    private float fireRate = 0.10F;
+    [SerializeField]
+    private float canFire = 0.0f;
+
 
 
     [SerializeField]
@@ -25,15 +31,24 @@ public class Player : MonoBehaviour
         Movement();
 
         
-         if (Input.GetKeyDown(KeyCode.Space))
+         if  (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
-            Instantiate(LaserPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
-        
+            Shoot();
+           
         }
 
     }
-      
-    private void Movement()
+    private void Shoot()
+    {
+        if (Time.time > canFire)
+        {
+            Instantiate(LaserPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+            canFire = Time.time + fireRate;
+        }
+    }
+
+
+private void Movement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
