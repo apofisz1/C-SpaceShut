@@ -7,14 +7,18 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public bool canTripleShot = false;
+
+
+
     [SerializeField]
     private GameObject LaserPrefab;
     [SerializeField]
-    private float fireRate = 0.10F;
+    private GameObject threeLeserPrefab;
+    [SerializeField]
+    private float fireRate = 0.25f;
     [SerializeField]
     private float canFire = 0.0f;
-
-
 
     [SerializeField]
     private float speed = 8.0f;
@@ -27,28 +31,33 @@ public class Player : MonoBehaviour
 
    private void Update()
     {
-        
         Movement();
+        Shoot();
 
-        
-         if  (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+        if  (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) //New dont need push the button, alwasy fire
         {
-            Shoot();
-           
+            Shoot();          
         }
-
     }
     private void Shoot()
     {
         if (Time.time > canFire)
         {
-            Instantiate(LaserPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
-            canFire = Time.time + fireRate;
+            if (canTripleShot == true)
+            {
+                Instantiate(threeLeserPrefab, transform.position, Quaternion.identity);
+
+            }
+            else
+            {
+                Instantiate(LaserPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+            }
+                canFire = Time.time + fireRate;
         }
     }
 
 
-private void Movement()
+private void Movement()  // mobil tuchsreen ???!!!!
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
@@ -66,7 +75,6 @@ private void Movement()
             transform.position = new Vector3(transform.position.x, -4.5f, 0);
         }
 
-
         if (transform.position.x > 8.5f)
         {
             transform.position = new Vector3(-8.5f, transform.position.y, 0);
@@ -77,5 +85,16 @@ private void Movement()
             transform.position = new Vector3(8.5f, transform.position.y, 0);
         }
     }
+    public void TripleShotPowerOn()
+    {
+        canTripleShot = true;
+        StartCoroutine(TripleShotPowerDownRoutine());
+    }
+    public IEnumerator TripleShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        canTripleShot = false;
 
+            
+    }
 }
