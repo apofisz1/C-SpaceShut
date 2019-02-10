@@ -8,6 +8,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public bool canTripleShot = false;
+    public bool speedBoostActive = false;
 
 
 
@@ -23,20 +24,20 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float speed = 8.0f;
 
-   
-  private void Start()
+
+    private void Start()
     {
-        transform.position = new Vector3(0, 0, 0); 
+        transform.position = new Vector3(0, 0, 0);
     }
 
-   private void Update()
+    private void Update()
     {
         Movement();
         Shoot();
 
-        if  (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) //New dont need push the button, alwasy fire
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) //New dont need push the button, alwasy fire
         {
-            Shoot();          
+            Shoot();
         }
     }
     private void Shoot()
@@ -52,19 +53,28 @@ public class Player : MonoBehaviour
             {
                 Instantiate(LaserPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
             }
-                canFire = Time.time + fireRate;
+            canFire = Time.time + fireRate;
         }
     }
 
 
-private void Movement()  // mobil tuchsreen ???!!!!
+    private void Movement()  // mobil tuchsreen ???!!!!
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
-        
-        transform.Translate(Vector3.right * Time.deltaTime * speed * horizontalInput);
-        transform.Translate(Vector3.up * Time.deltaTime * speed * verticalInput);
 
+        if (speedBoostActive == true)
+        {
+            transform.Translate(Vector3.right * Time.deltaTime * speed * 5 * horizontalInput);
+            transform.Translate(Vector3.up * Time.deltaTime * speed * 5 * verticalInput);
+
+
+        }
+        else
+        {
+            transform.Translate(Vector3.right * Time.deltaTime * speed * horizontalInput);
+            transform.Translate(Vector3.up * Time.deltaTime * speed * verticalInput);
+        }
         if (transform.position.y > 4.5f)
         {
             transform.position = new Vector3(transform.position.x, 4.5f, 0);
@@ -90,11 +100,23 @@ private void Movement()  // mobil tuchsreen ???!!!!
         canTripleShot = true;
         StartCoroutine(TripleShotPowerDownRoutine());
     }
+
+    public void SpeedBoostPowerUpOn()
+
+    {
+        speedBoostActive = true;
+        StartCoroutine(SpeddBoostDownRoutine());
+    }
+
     public IEnumerator TripleShotPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
         canTripleShot = false;
 
-            
     }
-}
+    public IEnumerator SpeddBoostDownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        speedBoostActive = false;
+    }
+}  

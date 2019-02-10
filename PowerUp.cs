@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
+    [SerializeField]
     private float speed = 3.0f;
+    [SerializeField]
+    private int powerUpID; // 0 = tripeshot 1 = speed  2 = shild
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +31,20 @@ public class PowerUp : MonoBehaviour
 
             if (player != null)
             {
-                player.TripleShotPowerOn();
+                if (powerUpID == 0)
+                {
+                    player.TripleShotPowerOn();
+                }
+                else if (powerUpID == 1)
+                {
+                    player.SpeedBoostPowerUpOn();
+                }
+                else if (powerUpID == 2)
+                {
+                    //shild
+                }
+
+
             }
             
 
